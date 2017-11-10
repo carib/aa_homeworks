@@ -1,5 +1,6 @@
 class Map
-  def initialize
+  def initialize(name = "Map")
+    @name = name
     @ivar = []
   end
   
@@ -11,7 +12,7 @@ class Map
       vals[kindex] = value
       @ivar = keys.zip(vals)
     else
-      @ivar.push([key, value])
+      @ivar << [key, value]
     end
   end
   
@@ -29,13 +30,12 @@ class Map
       key, val = pair
       str += "\n" if i > 0 && i % 3 == 0
       str += "  #{key} => #{val},"
-      
     end
-    puts "{\n#{str}\n}"
+    puts "#{@name} = {\n#{str}\n}"
   end
   
   def [](key)
-    lookup(key)
+    lookup(key) ? lookup(key) : assign(key)
   end
   
   def []=(key, val)
