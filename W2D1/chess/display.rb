@@ -13,6 +13,15 @@ class Display
   
   def render
     # debugger
+    system("clear")
     puts @board.display(@cursor.cursor_pos)
+  end
+  
+  def display_test
+    loop do
+      puts "input?"
+      @cursor.get_input
+      render
+    end
   end
 end

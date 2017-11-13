@@ -80,13 +80,15 @@ class Cursor
     when :space, :return
       @cursor_pos
     when :left, :right, :up, :down
-      MOVES[key]
+      diff = MOVES[key]
+      update_pos(diff)
     when :ctrl_c
       Process.exit(0)
     end
   end
 
   def update_pos(diff)
-    @cursor_pos = diff if board.in_bounds(diff)
+    new_pos = @cursor_pos.zip(diff).map { |coord| coord.reduce(:+) } 
+    @cursor_pos = new_pos if board.in_bounds(new_pos)
   end
 end
