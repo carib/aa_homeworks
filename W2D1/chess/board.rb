@@ -23,6 +23,12 @@ class Board
     row, col = pos
     @grid[row][col] = piece
   end
+  
+  def in_bounds(diff)
+    diff.all? { |el| el < 9 && el > -1 }
+  end
+  
+  
 end
 
 class Piece
