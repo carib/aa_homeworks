@@ -1,3 +1,4 @@
+require_relative 'piece'
 class Board
   def initialize
     @grid = Array.new(8) { Array.new(8) { NullPiece.new } }
@@ -7,11 +8,10 @@ class Board
   end
   
   def move_piece(start_pos, end_pos)
-    raise StandardError.new("No piece") if self[start_pos].is_a?(NullPiece) || self[start_pos].nil?
+    raise StandardError.new("No piece") if self[start_pos].is_a?(NullPiece)
     raise StandardError.new("Occupied") if self[end_pos].is_a?(Piece)
-    piece = self[start_pos]
-    self[end_pos] = piece
-    self[start_pos] = nil
+    self[end_pos] = self[start_pos]
+    self[start_pos] = NullPiece.new
   end
   
   def [](pos)
@@ -32,35 +32,10 @@ class Board
     str = ""
     @grid.each_with_index do |row, i|
       row.each_with_index do |pos, j|
-        if pos.is_a?(NullPiece)
-          [i,j] == cursor_pos ? str += pos.to_s(:red) : str += pos.to_s(:light_blue)
-        else
-          [i,j] == cursor_pos ? str += pos.to_s(:red) : str += pos.to_s(:light_blue)
-        end
-        # str[-4..-1].colorize(:red) if [i, j] == cursor_pos
+        [i,j] == cursor_pos ? str += pos.to_s(:red) : str += pos.to_s(:light_blue)
       end
       str += "\n"
     end
     str
   end
-end
-
-class Piece
-  
-  def initialize
-  end
-  
-  def to_s(color)
-    var = ":p"
-    "|#{var.colorize(color)}|"
-  end
-end
-
-class NullPiece < Piece
-  
-  def to_s(color)
-    var = "__"
-    "|#{var.colorize(:background => color)}|"
-  end
-  
 end
