@@ -10,13 +10,12 @@ class Display
     @cursor = Cursor.new([0,0], board)
     @board = board
   end
-  
+
   def render
-    # debugger
     system("clear")
     puts @board.display(@cursor.cursor_pos)
   end
-  
+
   def display_test
     loop do
       puts "input?"

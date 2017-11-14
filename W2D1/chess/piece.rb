@@ -1,13 +1,18 @@
 require 'byebug'
 require 'singleton'
-require_relative 'cursor'
+require 'colorize'
 
 class Piece
   attr_reader :symbol
+  attr_accessor :current_pos
 
   def initialize
     @current_board = nil
-    @symbol = :p
+    @symbol = nil
+    @current_pos = nil
+  end
+
+  def self.make_piece(symbol)
   end
 
   def empty?
@@ -19,7 +24,22 @@ class Piece
     #selects moves down based on piece movement logic?
   end
 
-  def moves(pos)
+  def moves
+  end
+
+  def next_pos(dir)
+    classes = [Queen, Rook, Bishop]
+    moves = []
+    next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
+    unless classes.include?(self.class)
+      while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
+        moves << next_pos
+        next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
+      end
+    else
+      moves << next_pos
+    end
+    moves
   end
 
   def update_board(board)
@@ -27,7 +47,7 @@ class Piece
   end
 
   def to_s(color)
-    var = self.symbol
+    var = ":#{symbol}"
     "|#{var.colorize(color)}|"
   end
 end
@@ -45,10 +65,42 @@ class NullPiece < Piece
   end
 end
 
-module SlidingPiece
+class Pawn < Piece
+  def initialize
+    @symbol = :p
+    @start_row = @current_pos.first
+  end
 
   def moves
-    #returns possible moves
+    moves = []
+
+
+
+    moves
+  end
+
+  protected
+
+  def at_start_row?
+    @current_pos.first == @start_row
+  end
+
+  def forward_dir
+    4 > @start_row
+  end
+
+  def forward_steps
+    forward_dir ? [1, 0] : [-1, 0]
+  end
+
+  def side_attacks
+    forward_dir ? [[1, 1], [1, -1]] : [[-1, -1], [-1, 1]]
+  end
+end
+
+
+module Slideable
+  def moves
     move_dirs
   end
 
@@ -73,7 +125,6 @@ module SlidingPiece
     end.flatten(1).reject { |xy| xy.empty? }
   end
 
-
   def horizontal_dirs
     [[0, -1], [0, 1], [-1, 0], [1, 0]]
   end
@@ -83,49 +134,80 @@ module SlidingPiece
   end
 
   def grow_unblocked_moves_in_dir(dir)
-    # debugger
-    moves = []
-    next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
-    while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
-      moves << next_pos
-      next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
-    end
-    moves
+    next_pos(dir)
+    # moves = []
+    # next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
+    # while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
+    #   moves << next_pos
+    #   next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
+    # end
+    # moves
   end
-=begin
-load 'piece.rb'
-b = Bishop.new
-brd = Board.new
-b.update_board(brd)
-b.moves
-=end
 end
 
-module SteppingPiece
-  def moves(pos)
+module Steppable
+  def moves
+    move_diffs
+  end
+
+  def move_diffs
   end
 end
 
 class Bishop < Piece
-  include SlidingPiece
+  include Slideable
   def initialize
     @symbol = :b
-    @current_pos = [2, 3]
+    @current_pos = nil
   end
 end
 
 class Rook < Piece
-  include SlidingPiece
+  include Slideable
   def initialize
     @symbol = :r
-    @current_pos = [2, 3]
+    @current_pos = nil
   end
 end
 
 class Queen < Piece
-  include SlidingPiece
+  include Slideable
   def initialize
     @symbol = :q
-    @current_pos = [2, 3]
+    @current_pos = nil
+  end
+end
+
+class King < Piece
+  include Steppable
+  def initialize
+    @symbol = :k
+    @current_pos = [0,3]
+  end
+
+  def move_diffs
+    move_dirs = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
+    moves_array = []
+    move_dirs.each do |dir|
+      moves_array << next_pos(dir)
+    end
+    moves_array.flatten(1)
+  end
+end
+
+class Knight < Piece
+  include Steppable
+  def initialize
+    @symbol = :h
+    @current_pos = [2,3]
+  end
+
+  def move_diffs
+    move_dirs = [[2, 1], [2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2], [-2, -1], [-2, 1]]
+    moves_array = []
+    move_dirs.each do |dir|
+      moves_array << next_pos(dir)
+    end
+    moves_array.flatten(1)
   end
 end
