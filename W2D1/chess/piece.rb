@@ -6,8 +6,7 @@ class Piece
   attr_reader :symbol
 
   def initialize
-    # @current_pos = [2,3]
-    # @current_board = nil
+    @current_board = nil
     @symbol = :p
   end
 
@@ -48,43 +47,48 @@ end
 
 module SlidingPiece
 
-  @mock_cursor = nil
-
-  def moves(pos)
+  def moves
     #returns possible moves
+    move_dirs
   end
 
-  # private
+  private
 
   def move_dirs
-    # debugger
-    @mock_cursor = Cursor.new(@current_pos, Board.new)
     moves = []
-    case self.symbol
-    when :b #diagonal for bishops
-      diagonal_dirs.each do |arr|
-        moves << grow_unblocked_moves_in_dir(arr)
+    case symbol
+    when :b then moves << dirs(diagonal_dirs)
+    when :r then moves << dirs(horizontal_dirs)
+    else
+      [horizontal_dirs, diagonal_dirs].each do |set|
+        moves << dirs(set)
       end
-      #call diagonal_dirs
-    when :r #horizontal/vertical for rooks
-      #call horizontal_dirs
-    when :q #both for queens
-      #call both
     end
-    moves
+    moves.flatten(1)
   end
 
-  def grow_unblocked_moves_in_dir(dx, dy)
-    debugger
+  def dirs(dir)
+    dir.each_with_object([]) do |dir, arr|
+      arr << grow_unblocked_moves_in_dir(dir)
+    end.flatten(1).reject { |xy| xy.empty? }
+  end
+
+
+  def horizontal_dirs
+    [[0, -1], [0, 1], [-1, 0], [1, 0]]
+  end
+
+  def diagonal_dirs
+    [[-1, -1],[-1, 1],[1, -1],[1, 1]]
+  end
+
+  def grow_unblocked_moves_in_dir(dir)
+    # debugger
     moves = []
-    pos = @mock_cursor.cursor_pos
-    cpos = @current_pos
-    pos = cpos
-    while @mock_cursor.board.empty?(pos)
-      dir_arr.each_with_index do |key, i|
-        pos = @mock_cursor.get_position(key)
-        moves << @mock_cursor.cursor_pos if i == dir_arr.length - 1
-      end
+    next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
+    while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
+      moves << next_pos
+      next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
     end
     moves
   end
@@ -93,53 +97,8 @@ load 'piece.rb'
 b = Bishop.new
 brd = Board.new
 b.update_board(brd)
-b.move_dirs
+b.moves
 =end
-  # def horizontal_dirs
-  #   row, col = @current_pos
-  #   x = Array.new(7) { col }
-  #   y = Array.new(7) { row }
-  #   x_moves = (0..7).to_a.reject { |x| x == col }
-  #   y_moves = (0..7).to_a.reject { |y| y == row }
-  #   x.zip(y_moves) + x_moves.zip(y)
-  # end
-
-  def horizontal_dirs
-    [[:left], [:right], [:up], [:down]]
-    #%i(left right up down)
-  end
-
-  # def diagonal_dirs
-  #   up = up_moves
-  #   down = down_moves
-  #   zips = [up[0].zip(up[1]), down[0].zip(down[1]), up[0].zip(down[1]), down[0].zip(up[1])]
-  #   zips.flatten(1).reject { |pair| pair.include?(nil) }
-  # end
-
-  def diagonal_dirs
-    [[:left, :up],[:left, :down],[:right, :up],[:right, :down]]
-  end
-
-  def up_moves
-    y, x = @current_pos
-    xdown = []
-    ydown = []
-    @current_pos.each_with_index do |pos, i|
-      pos.downto(1) { |n| i == 1 ? xdown << pos -= 1 : ydown << pos -= 1 }
-    end
-    [ydown, xdown]
-  end
-
-  def down_moves
-    y, x = @current_pos
-    xup = []
-    yup = []
-    @current_pos.each_with_index do |pos, i|
-      pos.upto(6) { |n| i == 1 ? xup << pos += 1 : yup << pos += 1 }
-    end
-    [yup, xup]
-  end
-
 end
 
 module SteppingPiece
@@ -153,14 +112,20 @@ class Bishop < Piece
     @symbol = :b
     @current_pos = [2, 3]
   end
-
 end
 
 class Rook < Piece
   include SlidingPiece
-
+  def initialize
+    @symbol = :r
+    @current_pos = [2, 3]
+  end
 end
 
 class Queen < Piece
   include SlidingPiece
+  def initialize
+    @symbol = :q
+    @current_pos = [2, 3]
+  end
 end

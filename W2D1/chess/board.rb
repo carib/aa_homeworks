@@ -29,7 +29,7 @@ class Board
   end
 
   def in_bounds(diff)
-    diff.all? { |el| el < 9 && el > -1 }
+    diff.all? { |el| el < 8 && el > -1 }
   end
 
   def display(cursor_pos)
