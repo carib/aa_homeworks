@@ -44,6 +44,11 @@ class Cursor
     handle_key(key)
   end
 
+  def get_position(key)
+    move = MOVES[key]
+    update_pos(move)
+  end
+
   private
 
   def read_char
@@ -88,7 +93,7 @@ class Cursor
   end
 
   def update_pos(diff)
-    new_pos = @cursor_pos.zip(diff).map { |coord| coord.reduce(:+) } 
+    new_pos = @cursor_pos.zip(diff).map { |coord| coord.reduce(:+) }
     @cursor_pos = new_pos if board.in_bounds(new_pos)
   end
 end
