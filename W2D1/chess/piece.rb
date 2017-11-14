@@ -29,17 +29,17 @@ class Piece
 
   def next_pos(dir)
     classes = [Queen, Rook, Bishop]
-    moves = []
-    next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
-    unless classes.include?(self.class)
-      while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
-        moves << next_pos
-        next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
+    dir.each_with_object([]) do |dir, arr|
+      next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
+      if classes.include?(self.class)
+        while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
+          arr << next_pos
+          next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
+        end
+      else
+        arr << next_pos if @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
       end
-    else
-      moves << next_pos
     end
-    moves
   end
 
   def update_board(board)
@@ -72,11 +72,6 @@ class Pawn < Piece
   end
 
   def moves
-    moves = []
-
-
-
-    moves
   end
 
   protected
@@ -90,7 +85,7 @@ class Pawn < Piece
   end
 
   def forward_steps
-    forward_dir ? [1, 0] : [-1, 0]
+    forward_dir ? [[1, 0]] : [[-1, 0]]
   end
 
   def side_attacks
@@ -109,20 +104,14 @@ module Slideable
   def move_dirs
     moves = []
     case symbol
-    when :b then moves << dirs(diagonal_dirs)
-    when :r then moves << dirs(horizontal_dirs)
+    when :b then moves << next_pos(diagonal_dirs)
+    when :r then moves << next_pos(horizontal_dirs)
     else
       [horizontal_dirs, diagonal_dirs].each do |set|
-        moves << dirs(set)
+        moves << next_pos(set)
       end
     end
     moves.flatten(1)
-  end
-
-  def dirs(dir)
-    dir.each_with_object([]) do |dir, arr|
-      arr << grow_unblocked_moves_in_dir(dir)
-    end.flatten(1).reject { |xy| xy.empty? }
   end
 
   def horizontal_dirs
@@ -131,17 +120,6 @@ module Slideable
 
   def diagonal_dirs
     [[-1, -1],[-1, 1],[1, -1],[1, 1]]
-  end
-
-  def grow_unblocked_moves_in_dir(dir)
-    next_pos(dir)
-    # moves = []
-    # next_pos = @current_pos.zip(dir).map { |coord| coord.reduce(:+) }
-    # while @current_board.in_bounds(next_pos) && @current_board[next_pos].empty?
-    #   moves << next_pos
-    #   next_pos = next_pos.zip(dir).map { |coord| coord.reduce(:+) }
-    # end
-    # moves
   end
 end
 
@@ -185,13 +163,12 @@ class King < Piece
     @current_pos = [0,3]
   end
 
+  def moves
+    next_pos(move_diffs)
+  end
+
   def move_diffs
-    move_dirs = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
-    moves_array = []
-    move_dirs.each do |dir|
-      moves_array << next_pos(dir)
-    end
-    moves_array.flatten(1)
+    [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
   end
 end
 
@@ -202,12 +179,11 @@ class Knight < Piece
     @current_pos = [2,3]
   end
 
+  def moves
+    next_pos(move_diffs)
+  end
+
   def move_diffs
-    move_dirs = [[2, 1], [2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2], [-2, -1], [-2, 1]]
-    moves_array = []
-    move_dirs.each do |dir|
-      moves_array << next_pos(dir)
-    end
-    moves_array.flatten(1)
+    [[2, 1], [2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2], [-2, -1], [-2, 1]]
   end
 end
