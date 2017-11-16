@@ -2,15 +2,18 @@
 - Card
   - Suit
   - Rank
-
---TODO--
-- Deck
+  - Deck
   - 52 cards
-    - all unique
-    - four face cards for each suit
-    - 9 number cards for each suit 
+  - all unique
+  - four face cards for each suit
+  - 9 number cards for each suit 
   - Build deck
   - Shuffle deck
   - Deal
+
+--TODO--
 - Hand
+  - total_value
+  - ranking of hands
+  - five cards
 - Player
