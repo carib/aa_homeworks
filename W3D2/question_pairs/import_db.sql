@@ -63,7 +63,8 @@ INSERT INTO
   questions (title, body, author_id)
 VALUES
   ('Whats my name?', 'Is it Arthur?', (SELECT id FROM users WHERE fname = 'Arthur')),
-  ('What?', 'Is', (SELECT id FROM users WHERE fname = 'Eugene'));
+  ('What?', 'Is', (SELECT id FROM users WHERE fname = 'Eugene')),
+  ('Whats my last name?', 'Is it Miller?', (SELECT id FROM users WHERE fname = 'Arthur'));
   
 INSERT INTO
   question_follows (follower_id, question_id)
@@ -86,7 +87,8 @@ INSERT INTO
   question_likes (user_id, question_id)
   VALUES
     ((SELECT id FROM users WHERE fname = 'Arthur'), (SELECT id FROM questions WHERE title = 'What?')),
-        ((SELECT id FROM users WHERE fname = 'Eugene'), (SELECT id FROM questions WHERE title = 'Whats my name?'));
+        ((SELECT id FROM users WHERE fname = 'Eugene'), (SELECT id FROM questions WHERE title = 'Whats my name?')),
+          ((SELECT id FROM users WHERE fname = 'Ernest'), (SELECT id FROM questions WHERE title = 'Whats my name?'));
   
   
   

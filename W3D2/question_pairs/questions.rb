@@ -1,3 +1,4 @@
+require 'byebug'
 require_relative 'qdb'
 class Question
   
@@ -52,6 +53,10 @@ class Question
     QuestionFollow.most_followed_questions(n)
   end
   
+  def self.most_liked(n)
+    QuestionLike.most_liked_questions(n)
+  end 
+  
   attr_accessor :title, :body, :author_id
   attr_reader :id
   def initialize(options = {})
@@ -95,4 +100,12 @@ class Question
   def followers
     QuestionFollow.followers_for_question_id(self.id)
   end
+  
+  def likers
+    QuestionLike.likers_for_question_id(self.id)
+  end 
+  
+  def num_likes
+    QuestionLike.num_likes_for_question_id(self.id)
+  end 
 end 

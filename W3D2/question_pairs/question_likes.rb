@@ -62,6 +62,51 @@ class QuestionLike
     likers.map { |datum| User.new(datum) }
   end
   
+  def self.num_likes_for_question_id(question_id)
+    num_likes = QuestionsDatabase.instance.execute(<<-SQL, question_id)  
+      SELECT
+        COUNT(question_likes.user_id) AS likes
+      FROM
+        users
+        JOIN question_likes ON users.id = question_likes.user_id
+      WHERE
+        question_id = ?
+    SQL
+    
+    num_likes.first['likes']
+  end
+  
+  def self.liked_questions_for_user_id(user_id)
+    liked_qs = QuestionsDatabase.instance.execute(<<-SQL, user_id)  
+      SELECT
+        *
+      FROM
+        questions
+        JOIN question_likes ON questions.id = question_likes.question_id
+      WHERE
+        question_likes.user_id = ?
+    SQL
+    return nil unless liked_qs.length > 0
+    
+    liked_qs.map { |datum| Question.new(datum) }
+  end
+  
+  def self.most_liked_questions(n)
+    most_liked = QuestionsDatabase.instance.execute(<<-SQL, n)  
+      SELECT
+        *, COUNT(question_likes.user_id)
+      FROM
+        questions
+        JOIN question_likes ON questions.id = question_likes.question_id
+      GROUP BY 
+        questions.title
+      LIMIT
+        ?
+    SQL
+    
+    most_liked.map { |datum| Question.new(datum) }
+  end 
+  
   attr_accessor :user_id, :question_id
   attr_reader :id
   def initialize(options = {})
