@@ -1,23 +1,6 @@
-class Reply
-  
-  def self.all
-    data = QuestionsDatabase.instance.execute("SELECT * FROM replies")
-    data.map { |datum| Reply.new(datum) }
-  end
-  
-  def self.find_by_id(id)
-    reply = QuestionsDatabase.instance.execute(<<-SQL, id)  
-      SELECT
-        *
-      FROM
-        replies
-      WHERE
-        id = ?
-    SQL
-    return nil unless reply.length > 0
-    
-    Reply.new(reply.first)
-  end 
+require_relative 'mb'
+
+class Reply < ModelBase
   
   def self.find_by_question_id(question_id)
     replies = QuestionsDatabase.instance.execute(<<-SQL, question_id)  
@@ -69,29 +52,6 @@ class Reply
     @user_id = options['user_id']
     @parent_id = options['parent_id']
   end 
-  
-  def create
-    raise "#{self} already in database" if @id
-    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @user_id, @parent_id)
-      INSERT INTO
-        replies (question_id, user_id, parent_id)
-      VALUES
-        (?, ?, ?)
-    SQL
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end 
-  
-  def update
-    raise "#{self} not in database" unless @id
-    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @user_id, @parent_id)
-      UPDATE
-        replies
-      SET
-        question_id = ?, user_id = ?, parent_id = ?
-      WHERE
-       id = ?
-    SQL
-  end
   
   def author
     User.find_by_id(self.user_id)

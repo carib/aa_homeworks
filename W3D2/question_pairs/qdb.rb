@@ -1,11 +1,14 @@
-require 'sqlite3'
-require 'singleton'
+# require 'sqlite3'
+# require 'singleton'
+# 
+# require_relative 'users'
+# require_relative 'questions'
+# require_relative 'question_follows'
+# require_relative 'question_likes'
+# require_relative 'replies'
+# require_relative 'model_base'
 
-require_relative 'users'
-require_relative 'questions'
-require_relative 'question_follows'
-require_relative 'question_likes'
-require_relative 'replies'
+require_relative 'requirements'
 
 class QuestionsDatabase < SQLite3::Database
   include Singleton
