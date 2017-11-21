@@ -34,6 +34,16 @@ class ModelBase
     SQL
   end
   
+  def method_missing(method_sym, *args)
+    raise "No such method " unless method_sym.to_s.include?("find_by")
+    string = method_sym.to_s[8..-1]
+    tables = []
+    string.map do |bit| 
+      self.instance_variables.each { |var| tables << var if string.include?(var.to_s) }
+    end 
+    p tables
+  end 
+  
   def initialize(options = {})
   end
   
@@ -61,6 +71,8 @@ class ModelBase
        id = ?
     SQL
   end
+  
+  
   
   private
   
