@@ -21,8 +21,20 @@ class ModelBase
     self.new(table.first)
   end
   
-  def initialize(options = {})
+  def self.where(options)
+    debugger
+    QuestionsDatabase.instance.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        #{self.name.tableize}
+      WHERE
+        #{options.map { |key, val| "#{key} = #{val.is_a?(String) ? "'#{val}'" : val}"}.join(" OR ")}
 
+    SQL
+  end
+  
+  def initialize(options = {})
   end
   
   def save
