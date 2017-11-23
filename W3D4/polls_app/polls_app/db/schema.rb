@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123172719) do
+ActiveRecord::Schema.define(version: 20171123191718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,9 @@ ActiveRecord::Schema.define(version: 20171123172719) do
     t.string "text", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "question_id", null: false
     t.index ["id"], name: "index_answer_choices_on_id"
+    t.index ["question_id"], name: "index_answer_choices_on_question_id"
   end
 
   create_table "polls", force: :cascade do |t|
@@ -35,7 +37,9 @@ ActiveRecord::Schema.define(version: 20171123172719) do
     t.string "text", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "poll_id", null: false
     t.index ["id"], name: "index_questions_on_id"
+    t.index ["poll_id"], name: "index_questions_on_poll_id"
   end
 
   create_table "responses", force: :cascade do |t|
@@ -53,5 +57,7 @@ ActiveRecord::Schema.define(version: 20171123172719) do
     t.index ["id"], name: "index_users_on_id"
   end
 
+  add_foreign_key "answer_choices", "questions"
   add_foreign_key "polls", "users"
+  add_foreign_key "questions", "polls"
 end
