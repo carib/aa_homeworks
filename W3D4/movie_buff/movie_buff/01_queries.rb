@@ -9,7 +9,6 @@ def it_was_ok
   Movie
     .select('id','title','score')
     .where(score: 2..3)
-
 end
 
 def harrison_ford
@@ -29,8 +28,6 @@ def harrison_ford
     .where("actors.name = 'Harrison Ford'")
     .where.not( 'castings.ord = 1')
     .group('movies.id')
-    
-
 end
 
 def biggest_cast
@@ -70,7 +67,8 @@ def directed_by_one_of(them)
   Movie
     .select(:id, :title)
     .joins(:actors)
-    .where(name: them)
+    .where(director_id: Actor.select(:id).where(name: them))
+    .group(:id)
 end
 
 def movie_names_before_1940
@@ -84,5 +82,5 @@ def movie_names_before_1940
   # improve performace for larger queries.
   #
   # Use pluck to find the title of all movies made before 1940.
-
+  Movie.where('yr < 1940').pluck(:title)
 end
