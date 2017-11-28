@@ -1,0 +1,12 @@
+<!-- <h1>Cats#index</h1>
+<p>Find me in app/views/cats/index.html.erb</p> -->
+
+
+<h1>Cats</h1>
+<ul>
+  <% @cat.each do |cat| %>
+    <li>
+      <a href="<%= cat_url(cat) %>"><%= cat.name %></a>
+    </li>
+  <% end %>
+</ul>

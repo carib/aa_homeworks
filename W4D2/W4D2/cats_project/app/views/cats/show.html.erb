@@ -1,0 +1,35 @@
+<!-- <h1>Cats#show</h1>
+<p>Find me in app/views/cats/show.html.erb</p> -->
+
+
+<h1><%= @cat.name %></h1>
+
+<style>
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0px;
+}
+
+table, th, td {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+</style>
+
+<table>
+  <colgroup span="4"></colgroup>
+  <tr>
+    <th>Color</th>
+    <th>Birth Date</th>
+    <th>Sex</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td> <%= @cat.color %> </td>
+    <td> <%= @cat.birth_date %> </td>
+    <td> <%= @cat.sex %> </td>
+    <td> <%= @cat.description %> </td>
+  </tr>
+</table>
