@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <title>MusicApp</title>
@@ -7,6 +8,22 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+  
+  <header>
+    <h1>MUSIC APP</h1>
+    <div class="flex-buttons">
+      <% if signed_in? %>
+      <form class="" action="<%= session_url %>" method="post">
+        <%= auth_token %>
+        <input type="hidden" name="_method" value="delete">
+        <input type="submit" name="" value="Log Out">
+      </form>
+      <% else %>
+        <a href="<%= new_session_url %>">Log In</a>
+        <a href="<%= new_user_url  %>">Sign Up</a>
+      <% end %>
+    </div>
+  </header>
 
   <body>
     <%= yield %>
