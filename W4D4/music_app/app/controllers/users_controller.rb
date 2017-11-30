@@ -1,11 +1,12 @@
 class UsersController < ApplicationController
-  # before_action :redirect_if_not_signed_in, only: :show
+  before_action :redirect_if_not_signed_in, only: :show
   
   def new
     render :new
   end
   
   def show
+    render :show
   end
   
   def create
@@ -25,7 +26,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(:email, :password)
   end
   
-  # def redirect_if_not_signed_in
-  #   redirect_to links_url unless 
-  # end
+  def redirect_if_not_signed_in
+    redirect_to links_url unless signed_in?
+  end
 end

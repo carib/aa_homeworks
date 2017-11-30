@@ -15,4 +15,8 @@ class Album < ApplicationRecord
   validates :title, :year, presence: true
   
   belongs_to :band
+  has_many :tracks,
+    class_name: :Track,
+    foreign_key: :album_id,
+    dependent: :destroy
 end

@@ -6,6 +6,7 @@ class BandsController < ApplicationController
   
   def show
     @band = Band.find(params[:id])
+    @albums = @band.albums
     render :show
   end
 
@@ -41,6 +42,14 @@ class BandsController < ApplicationController
   end
 
   def destroy
+    @band = Band.find(params[:id])
+    if @band.destroy!
+      flash[:success] = "THRASHED!"
+      redirect_to bands_url
+    else
+      flash.now[:errors] = "...and the band played on..."
+      render :index
+    end
   end
   
   private

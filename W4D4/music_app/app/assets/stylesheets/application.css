@@ -15,12 +15,29 @@
  */
  * {
   background-color: #b3b3b3;
+  font-family: 'Roboto Mono', monospace;
  }
  
 header {
   display: flex;
   flex-direction: initial;
   justify-content: space-between;
+
+}
+
+header p {
+  all: unset;
+  margin-left: 3px;
+  align-self: flex-start;
+  font-style: italic;
+  font-stretch: ultra-expanded;
+  font-size: 50px;
+  text-shadow: -10px 6px 1px #b3fce2;
+}
+
+header a {
+  color: inherit;
+  text-decoration: none;
 }
 
 

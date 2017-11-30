@@ -13,9 +13,11 @@ class Band < ApplicationRecord
   
   has_many :albums,
     class_name: :Album,
-    foreign_key: :band_id
+    foreign_key: :band_id,
+    dependent: :destroy
   
   has_many :tracks,
     class_name: :Track,
-    foreign_key: :band_id
+    foreign_key: :band_id,
+    dependent: :destroy
 end

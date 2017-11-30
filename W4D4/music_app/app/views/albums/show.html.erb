@@ -1,2 +1,14 @@
-<h1>Albums#show</h1>
-<p>Find me in app/views/albums/show.html.erb</p>
+<div class="album-div">
+<h1>
+  <a href="<%= band_url(@band) %>"><%= @band.name %></a>,
+  <%= @album.title %>, 
+  <%= @album.year %>
+</h1>
+</div>
+<ol>
+  <% @album.tracks.each do |track| %>
+    <li>
+      <%= track.title %>
+    </li>
+  <% end %>  
+</ol>
