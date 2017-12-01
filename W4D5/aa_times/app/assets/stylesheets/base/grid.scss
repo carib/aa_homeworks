@@ -1,0 +1,45 @@
+.main-content {
+  display: flex;
+  justify-content: center;
+  
+}
+
+.big-head {
+  font-size: 25px;
+  font-weight: bolder;
+  font-style: italic;
+  font-family: $serif;
+  text-decoration: underline;
+}
+
+.col-1-4 {
+  width: 30%;
+  margin-right: 20px;
+}
+
+.col-1-2 {
+  
+}
+
+.col {
+  // ...
+}
+
+// .col-1-
+
+/* Attribute selector targeting all elements
+with a class attribute containing 'col-' */
+[class*='col-'] {
+  // ...
+}
+
+[class*='col-']:last-of-type {
+  // ...
+}
+
+@media all and (max-width: 1000px) {
+  [class*='col-'] {
+    // width:
+  }
+}
+
