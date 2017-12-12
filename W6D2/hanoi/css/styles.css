@@ -1,0 +1,44 @@
+
+h1{
+  text-align: center;
+  width:600px;
+  margin: 0 auto;
+}
+
+.hanoi {
+  width: 600px;
+  height: 300px;
+  margin: 0 auto;
+}
+
+.hanoi ul{
+  height:100%;
+  float: left;
+  width: 30%;
+  margin: 10px;
+  border-bottom: 5px solid black;
+}
+
+.hanoi li{
+  list-style: none;
+  background-color: red;
+  width: 100%;
+  height: 30%;
+  margin: 5px 0;
+  border-radius: 20px;
+}
+
+.one {
+  width: 30%;
+  margin: 10px auto;
+}
+
+.two {
+  width: 60%;
+  margin: 10px auto;
+}
+
+.three {
+  width: 100%;
+  margin: 10px auto;
+}

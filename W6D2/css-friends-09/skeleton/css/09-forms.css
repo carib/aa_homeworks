@@ -1,0 +1,23 @@
+/* PHASE 9: Forms */
+
+.content-main{
+}
+.content-main > .thumb{
+  float:left;
+}
+
+.input{
+  background-color: lightgray;
+  width: calc(100% - 65px);
+  float:right;
+}
+
+.clearfix{
+  content: "";
+  clear: both;
+}
+
+.input textarea {
+  padding: 10px;
+  background-color: white;
+}
