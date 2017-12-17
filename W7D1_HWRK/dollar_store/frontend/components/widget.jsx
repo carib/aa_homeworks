@@ -9,6 +9,7 @@ class Widget extends React.Component {
     this.forceUpdate = this.forceUpdate.bind(this);
 
     // require this component to re-render whenever the store's state changes
+    debugger
     this.props.store.subscribe(this.forceUpdate);
     this.currencies = ["USD", "EUR", "CAD", "JPY", "GBP", "CNY"];
     this.selectCurrency = selectCurrency.bind(this);
@@ -38,7 +39,7 @@ class Widget extends React.Component {
     const { rates, baseCurrency } = this.props.store.getState();
 
     const currencyOptions = this.currencies.map( (currency) => (
-        <div onClick={ () => { this.fetchRates(currency) }}
+        <div onClick={ () => { this.fetchRates(currency); }}
              key={currency}
              className="currency-option">
           {currency}
@@ -69,7 +70,7 @@ class Widget extends React.Component {
       </div>
     );
   }
-};
+}
 
 
 export default Widget;
