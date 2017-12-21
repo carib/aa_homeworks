@@ -1,7 +1,11 @@
 json.set! 'pokemon' do
-  json.extract! @pokemon, :id, :name, :attack, :defense, :image_url, :moves, :poke_type
+  json.image_url asset_path(@pokemon.image_url)
+  json.extract! @pokemon, :id, :name, :attack, :defense, :moves, :poke_type
 end
 
 json.set! 'items' do
-  json.array! @pokemon.items, :id, :name, :pokemon_id, :price, :happiness, :image_url
+  json.array! @pokemon.items do |item|
+    json.extract! item, :id, :name, :pokemon_id, :price, :happiness
+    json.image_url asset_path(item.image_url)
+  end
 end

@@ -6,3 +6,12 @@ export const fetchAllPokemon = () => {
     })
   );
 };
+
+export const fetchSinglePokemon = (pokemonId) => {
+  return (
+    $.ajax({
+      url: `/api/pokemon/${pokemonId}`,
+      method: 'GET'
+    })
+  );
+};
